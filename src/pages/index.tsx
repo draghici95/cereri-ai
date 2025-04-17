@@ -192,7 +192,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-gray-100 px-4 pt-8 relative">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 pt-12 relative">
       <div className="w-full max-w-md bg-white p-6 rounded shadow space-y-4">
         <h1 className="text-2xl font-bold text-center">Generează cererea</h1>
 
@@ -234,15 +234,15 @@ export default function Home() {
               type="date"
               value={dataStart}
               onChange={(e) => setDataStart(e.target.value)}
-              className="w-full border rounded p-2 text-sm"
               placeholder="Data început"
+              className="w-full border rounded p-2 text-sm text-gray-500"
             />
             <input
               type="date"
               value={dataEnd}
               onChange={(e) => setDataEnd(e.target.value)}
-              className="w-full border rounded p-2 text-sm"
-              placeholder="Data final"
+              placeholder="Data sfârșit"
+              className="w-full border rounded p-2 text-sm text-gray-500"
             />
           </div>
         ) : (
@@ -250,8 +250,8 @@ export default function Home() {
             type="date"
             value={dataSingle}
             onChange={(e) => setDataSingle(e.target.value)}
-            className="w-full border rounded p-2 text-sm"
-            placeholder="Selectează data"
+            placeholder="Selectează o dată"
+            className="w-full border rounded p-2 text-sm text-gray-500"
           />
         )}
 
@@ -291,7 +291,6 @@ export default function Home() {
           </>
         )}
       </div>
-
       <Feedback />
     </div>
   );
