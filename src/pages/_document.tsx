@@ -23,6 +23,27 @@ export default function Document() {
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
 
+        {/* Schema.org (JSON-LD) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Cereri.ai",
+              url: "https://cereri-ai.vercel.app",
+              description: "Generează rapid cereri oficiale în format PDF și Word.",
+              applicationCategory: "Productivity",
+              inLanguage: "ro",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "RON"
+              }
+            }),
+          }}
+        />
+
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZH2CDNGKD"></script>
         <script

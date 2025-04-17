@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cereri-ai.vercel.app/sitemap.xml
