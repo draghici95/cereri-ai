@@ -18,7 +18,7 @@ export default function Document() {
         <meta name="author" content="Cereri.ai" />
 
         {/* Google Search Console Verification */}
-        <meta name="google-site-verification" content="FfSA2W0qUhqFJ_MwsC1q1XDCqAhA1UpI1ZPGiRp57gM" />
+        <meta name="google-site-verification" content="FfSA2WOqUhqFJ_UEL82pFNdda8zDuKQHF58ha7tEh_U" />
 
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
