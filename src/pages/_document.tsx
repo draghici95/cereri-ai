@@ -7,9 +7,18 @@ export default function Document() {
         {/* Meta tags SEO */}
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Generează cereri oficiale gratuite: demisie, concediu, eveniment. Format profesional, PDF & Word. Rapid și fără bătăi de cap." />
-        <meta name="keywords" content="cerere demisie, cerere concediu, PDF cerere, model cerere 2025" />
+        <meta
+          name="description"
+          content="Generează cereri oficiale gratuite: demisie, concediu, eveniment. Format profesional, PDF & Word. Rapid și fără bătăi de cap."
+        />
+        <meta
+          name="keywords"
+          content="cerere demisie, cerere concediu, PDF cerere, model cerere 2025"
+        />
         <meta name="author" content="Cereri.ai" />
+
+        {/* Google Search Console Verification */}
+        <meta name="google-site-verification" content="FfSA2W0qUhqFJ_MwsC1q1XDCqAhA1UpI1ZPGiRp57gM" />
 
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
