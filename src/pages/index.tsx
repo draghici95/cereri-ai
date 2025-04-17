@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
+import Feedback from '../components/Feedback';
 
 const tipuriCereri = [
   'Cerere de demisie',
@@ -191,7 +192,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 relative">
       <div className="w-full max-w-md bg-white p-6 rounded shadow space-y-4">
         <h1 className="text-2xl font-bold text-center">Generează cererea</h1>
 
@@ -286,6 +287,11 @@ export default function Home() {
             </button>
           </>
         )}
+      </div>
+
+      {/* Buton feedback poziționat în colț dreapta-jos */}
+      <div className="fixed bottom-4 right-4 z-50 w-72 max-w-full">
+        <Feedback />
       </div>
     </div>
   );
