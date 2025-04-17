@@ -27,7 +27,9 @@ export default function Home() {
   const filtrareText = (text: string): string => {
     const linii = text.trim().split('\n');
     if (linii[0].toLowerCase().includes('cerere')) linii.shift();
-    return linii.filter(l => !l.toLowerCase().includes('semnătură') && !l.toLowerCase().includes('data:')).join('\n');
+    return linii
+      .filter((l) => !l.toLowerCase().includes('semnătură') && !l.toLowerCase().includes('data:'))
+      .join('\n');
   };
 
   const genereazaCererea = async () => {
@@ -48,12 +50,10 @@ export default function Home() {
   const descarcaPDF = async () => {
     const doc = await PDFDocument.create();
     doc.registerFontkit(fontkit);
-
     let page = doc.addPage([595.28, 841.89]);
     const { width, height } = page.getSize();
-
     const fontUrl = '/fonts/noto.ttf';
-    const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
+    const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
     const customFont = await doc.embedFont(fontBytes);
 
     const fontSize = 11;
@@ -73,10 +73,10 @@ export default function Home() {
     y -= lineHeight * 2;
 
     const wrappedLines: string[] = [];
-    cerere.split('\n').forEach(paragraph => {
+    cerere.split('\n').forEach((paragraph) => {
       const words = paragraph.split(' ');
       let line = '';
-      words.forEach(word => {
+      words.forEach((word) => {
         const testLine = line + word + ' ';
         const testWidth = customFont.widthOfTextAtSize(testLine, fontSize);
         if (testWidth < maxWidth) {
@@ -90,7 +90,7 @@ export default function Home() {
       wrappedLines.push('');
     });
 
-    wrappedLines.forEach(line => {
+    wrappedLines.forEach((line) => {
       if (y < 80) {
         page = doc.addPage([595.28, 841.89]);
         y = height - 60;
@@ -151,12 +151,11 @@ export default function Home() {
               children: [new TextRun({ text: tip, bold: true, size: 26, break: 1 })],
               spacing: { after: 200 },
             }),
-            ...cerere.split('\n').map(
-              line =>
-                new Paragraph({
-                  children: [new TextRun({ text: line, size: 22 })],
-                  spacing: { after: 100 },
-                })
+            ...cerere.split('\n').map((line) =>
+              new Paragraph({
+                children: [new TextRun({ text: line, size: 22 })],
+                spacing: { after: 100 },
+              })
             ),
             new Paragraph({
               children: [
@@ -166,7 +165,10 @@ export default function Home() {
             }),
             new Paragraph({
               children: [
-                new TextRun({ text: `Data: ${new Date().toLocaleDateString('ro-RO')}`, size: 22 }),
+                new TextRun({
+                  text: `Data: ${new Date().toLocaleDateString('ro-RO')}`,
+                  size: 22,
+                }),
               ],
               alignment: 'right',
             }),
@@ -189,105 +191,46 @@ export default function Home() {
       <div className="w-full max-w-md bg-white p-6 rounded shadow space-y-4">
         <h1 className="text-2xl font-bold text-center">Generează cererea</h1>
 
-        <label className="text-sm font-medium">Numele tău</label>
-        <input
-          type="text"
-          value={nume}
-          onChange={(e) => setNume(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        />
+        <input type="text" placeholder="Numele tău" value={nume} onChange={(e) => setNume(e.target.value)} className="w-full border rounded p-2 text-sm" />
+        <input type="text" placeholder="Funcția ta" value={functie} onChange={(e) => setFunctie(e.target.value)} className="w-full border rounded p-2 text-sm" />
+        <input type="text" placeholder="Numele companiei (opțional)" value={firma} onChange={(e) => setFirma(e.target.value)} className="w-full border rounded p-2 text-sm" />
 
-        <label className="text-sm font-medium">Funcția ta</label>
-        <input
-          type="text"
-          value={functie}
-          onChange={(e) => setFunctie(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        />
-
-        <label className="text-sm font-medium">Numele companiei (opțional)</label>
-        <input
-          type="text"
-          value={firma}
-          onChange={(e) => setFirma(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        />
-
-        <label className="text-sm font-medium">Tipul cererii</label>
-        <select
-          value={tip}
-          onChange={(e) => setTip(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        >
-          {tipuriCereri.map(opt => (
+        <select value={tip} onChange={(e) => setTip(e.target.value)} className="w-full border rounded p-2 text-sm">
+          {tipuriCereri.map((opt) => (
             <option key={opt}>{opt}</option>
           ))}
         </select>
 
         {esteConcediu ? (
           <div className="flex flex-col sm:flex-row gap-2">
-            <div className="w-full">
-              <label className="text-sm font-medium">Data început</label>
-              <input
-                type="date"
-                value={dataStart}
-                onChange={(e) => setDataStart(e.target.value)}
-                className="w-full border rounded p-2 text-sm"
-              />
-            </div>
-            <div className="w-full">
-              <label className="text-sm font-medium">Data final</label>
-              <input
-                type="date"
-                value={dataEnd}
-                onChange={(e) => setDataEnd(e.target.value)}
-                className="w-full border rounded p-2 text-sm"
-              />
-            </div>
+            <input type="date" value={dataStart} onChange={(e) => setDataStart(e.target.value)} className="w-full border rounded p-2 text-sm" />
+            <input type="date" value={dataEnd} onChange={(e) => setDataEnd(e.target.value)} className="w-full border rounded p-2 text-sm" />
           </div>
         ) : (
-          <div className="w-full">
-            <label className="text-sm font-medium">Data</label>
-            <input
-              type="date"
-              value={dataSingle}
-              onChange={(e) => setDataSingle(e.target.value)}
-              className="w-full border rounded p-2 text-sm"
-            />
-          </div>
+          <input
+            type="date"
+            value={dataSingle}
+            onChange={(e) => setDataSingle(e.target.value)}
+            className={`w-full border rounded p-2 text-sm ${!dataSingle ? 'text-gray-400' : ''}`}
+            placeholder="Selectează o dată"
+            onFocus={(e) => e.target.classList.remove('text-gray-400')}
+          />
         )}
 
-        <button
-          onClick={genereazaCererea}
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm"
-        >
+        <button onClick={genereazaCererea} disabled={loading} className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm">
           {loading ? 'Se generează...' : 'Generează cererea'}
         </button>
 
         {cerere && (
           <>
-            <textarea
-              className="w-full border rounded p-2 h-48 text-sm"
-              value={cerere}
-              readOnly
-            />
-            <button
-              onClick={() => navigator.clipboard.writeText(cerere)}
-              className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm"
-            >
+            <textarea className="w-full border rounded p-2 h-48 text-sm" value={cerere} readOnly />
+            <button onClick={() => navigator.clipboard.writeText(cerere)} className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm">
               Copiază textul
             </button>
-            <button
-              onClick={descarcaPDF}
-              className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 text-sm"
-            >
+            <button onClick={descarcaPDF} className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 text-sm">
               Descarcă PDF
             </button>
-            <button
-              onClick={descarcaWord}
-              className="w-full bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700 text-sm"
-            >
+            <button onClick={descarcaWord} className="w-full bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700 text-sm">
               Descarcă Word
             </button>
           </>
