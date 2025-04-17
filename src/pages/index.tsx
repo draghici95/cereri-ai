@@ -192,8 +192,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 relative">
-      <div className="w-full max-w-md bg-white p-6 rounded shadow space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="w-full max-w-md bg-white p-6 rounded shadow space-y-4 relative">
         <h1 className="text-2xl font-bold text-center">Generează cererea</h1>
 
         <input
@@ -235,12 +235,14 @@ export default function Home() {
               value={dataStart}
               onChange={(e) => setDataStart(e.target.value)}
               className="w-full border rounded p-2 text-sm"
+              placeholder="Data început"
             />
             <input
               type="date"
               value={dataEnd}
               onChange={(e) => setDataEnd(e.target.value)}
               className="w-full border rounded p-2 text-sm"
+              placeholder="Data final"
             />
           </div>
         ) : (
@@ -248,7 +250,10 @@ export default function Home() {
             type="date"
             value={dataSingle}
             onChange={(e) => setDataSingle(e.target.value)}
-            className="w-full border rounded p-2 text-sm"
+            className={`w-full border rounded p-2 text-sm ${
+              !dataSingle ? 'text-gray-400' : 'text-black'
+            }`}
+            placeholder="Selectează o dată"
           />
         )}
 
@@ -289,10 +294,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Buton feedback poziționat în colț dreapta-jos */}
-      <div className="fixed bottom-4 right-4 z-50 w-72 max-w-full">
-        <Feedback />
-      </div>
+      {/* Componenta de feedback */}
+      <Feedback />
     </div>
   );
 }
