@@ -1,57 +1,60 @@
 import { useState } from 'react';
 
 export default function Feedback() {
-  const [showBox, setShowBox] = useState(false);
-  const [feedback, setFeedback] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [deschis, setDeschis] = useState(false);
+  const [mesaj, setMesaj] = useState('');
+  const [trimis, setTrimis] = useState(false);
 
   const handleSubmit = () => {
-    if (feedback.trim()) {
-      localStorage.setItem(`feedback_${Date.now()}`, feedback);
-      setSubmitted(true);
-      setFeedback('');
+    if (mesaj.trim()) {
+      localStorage.setItem(`feedback_${Date.now()}`, mesaj);
+      setTrimis(true);
+      setMesaj('');
       setTimeout(() => {
-        setShowBox(false);
-        setSubmitted(false);
-      }, 3000);
+        setDeschis(false);
+        setTrimis(false);
+      }, 2500);
     }
   };
 
   return (
-    <div>
-      {/* Buton plutitor */}
-      <button
-        onClick={() => setShowBox(!showBox)}
-        className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow-lg text-sm z-50"
-      >
-        Feedback
-      </button>
-
-      {/* Popup feedback */}
-      {showBox && (
-        <div className="fixed bottom-20 right-4 bg-white border border-gray-300 shadow-xl rounded-lg p-4 w-72 z-50">
-          {!submitted ? (
+    <div className="fixed bottom-4 right-4 z-50">
+      {!deschis ? (
+        <button
+          onClick={() => setDeschis(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-full shadow hover:bg-blue-700 transition-all text-sm"
+        >
+          Ai o sugestie?
+        </button>
+      ) : (
+        <div className="bg-white border shadow-lg rounded p-4 w-64">
+          {!trimis ? (
             <>
-              <p className="text-sm font-medium mb-2 text-gray-700">
-                Ce am putea îmbunătăți?
-              </p>
+              <p className="text-sm mb-2 font-medium">Ce am putea îmbunătăți?</p>
               <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Scrie feedbackul tău..."
-                className="w-full border rounded p-2 text-sm mb-2"
-                rows={3}
+                value={mesaj}
+                onChange={(e) => setMesaj(e.target.value)}
+                className="w-full border p-2 rounded text-sm mb-2"
+                placeholder="Lasă o idee, o problemă, ceva ce ți-a plăcut sau nu..."
               />
-              <button
-                onClick={handleSubmit}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm py-1 rounded"
-              >
-                Trimite
-              </button>
+              <div className="flex justify-between">
+                <button
+                  onClick={() => setDeschis(false)}
+                  className="text-gray-500 text-sm hover:underline"
+                >
+                  Închide
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                >
+                  Trimite
+                </button>
+              </div>
             </>
           ) : (
-            <p className="text-green-600 font-semibold text-sm text-center">
-              Mulțumim pentru feedback! 💙
+            <p className="text-green-600 text-sm font-medium">
+              Mulțumim! Sugestia ta a fost salvată.
             </p>
           )}
         </div>
