@@ -50,7 +50,6 @@ export default function Home() {
   const descarcaPDF = async () => {
     const doc = await PDFDocument.create();
     doc.registerFontkit(fontkit);
-
     let page = doc.addPage([595.28, 841.89]);
     const { width, height } = page.getSize();
 
@@ -73,7 +72,6 @@ export default function Home() {
     });
 
     y -= lineHeight * 2;
-
     const wrappedLines: string[] = [];
     cerere.split('\n').forEach((paragraph) => {
       const words = paragraph.split(' ');
@@ -108,7 +106,6 @@ export default function Home() {
     });
 
     y -= 40;
-
     page.drawText('Semnătură:', {
       x: startX,
       y,
@@ -116,7 +113,6 @@ export default function Home() {
       font: customFont,
       color: rgb(0, 0, 0),
     });
-
     page.drawLine({
       start: { x: startX + 70, y: y - 2 },
       end: { x: startX + 270, y: y - 2 },
@@ -136,7 +132,6 @@ export default function Home() {
     const pdfBytes = await doc.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
-
     const a = document.createElement('a');
     a.href = url;
     a.download = `cerere_${tip.replace(/\s+/g, '_')}.pdf`;
@@ -150,9 +145,7 @@ export default function Home() {
         {
           children: [
             new Paragraph({
-              children: [
-                new TextRun({ text: tip, bold: true, size: 26, break: 1 }),
-              ],
+              children: [new TextRun({ text: tip, bold: true, size: 26, break: 1 })],
               spacing: { after: 200 },
             }),
             ...cerere.split('\n').map(
@@ -192,104 +185,63 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-gray-100 px-4 pt-8 relative">
+    <div className="min-h-screen flex flex-col items-center bg-gray-100 px-4 pt-8 font-sans">
+      {/* Titlu aplicație sus */}
+      <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
+        Creează cereri oficiale rapid și fără cont
+      </h2>
+
+      {/* Formularul */}
       <div className="w-full max-w-md bg-white p-6 rounded shadow space-y-4">
         <h1 className="text-2xl font-bold text-center">Generează cererea</h1>
 
-        <input
-          type="text"
-          placeholder="Numele tău"
-          value={nume}
-          onChange={(e) => setNume(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        />
-        <input
-          type="text"
-          placeholder="Funcția ta"
-          value={functie}
-          onChange={(e) => setFunctie(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        />
-        <input
-          type="text"
-          placeholder="Numele companiei (opțional)"
-          value={firma}
-          onChange={(e) => setFirma(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        />
+        <input type="text" placeholder="Numele tău" value={nume} onChange={(e) => setNume(e.target.value)} className="w-full border rounded p-2 text-sm" />
+        <input type="text" placeholder="Funcția ta" value={functie} onChange={(e) => setFunctie(e.target.value)} className="w-full border rounded p-2 text-sm" />
+        <input type="text" placeholder="Numele companiei (opțional)" value={firma} onChange={(e) => setFirma(e.target.value)} className="w-full border rounded p-2 text-sm" />
 
-        <select
-          value={tip}
-          onChange={(e) => setTip(e.target.value)}
-          className="w-full border rounded p-2 text-sm"
-        >
-          {tipuriCereri.map((opt) => (
-            <option key={opt}>{opt}</option>
-          ))}
+        <select value={tip} onChange={(e) => setTip(e.target.value)} className="w-full border rounded p-2 text-sm">
+          {tipuriCereri.map((opt) => <option key={opt}>{opt}</option>)}
         </select>
 
         {esteConcediu ? (
           <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="date"
-              value={dataStart}
-              onChange={(e) => setDataStart(e.target.value)}
-              className="w-full border rounded p-2 text-sm"
-              placeholder="Data început"
-            />
-            <input
-              type="date"
-              value={dataEnd}
-              onChange={(e) => setDataEnd(e.target.value)}
-              className="w-full border rounded p-2 text-sm"
-              placeholder="Data final"
-            />
+            <input type="date" value={dataStart} onChange={(e) => setDataStart(e.target.value)} className="w-full border rounded p-2 text-sm" />
+            <input type="date" value={dataEnd} onChange={(e) => setDataEnd(e.target.value)} className="w-full border rounded p-2 text-sm" />
           </div>
         ) : (
-          <input
-            type="date"
-            value={dataSingle}
-            onChange={(e) => setDataSingle(e.target.value)}
-            className="w-full border rounded p-2 text-sm"
-            placeholder="Selectează data"
-          />
+          <input type="date" value={dataSingle} onChange={(e) => setDataSingle(e.target.value)} className="w-full border rounded p-2 text-sm" />
         )}
 
-        <button
-          onClick={genereazaCererea}
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm"
-        >
+        <button onClick={genereazaCererea} disabled={loading} className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm">
           {loading ? 'Se generează...' : 'Generează cererea'}
         </button>
 
         {cerere && (
           <>
-            <textarea
-              className="w-full border rounded p-2 h-48 text-sm"
-              value={cerere}
-              readOnly
-            />
-            <button
-              onClick={() => navigator.clipboard.writeText(cerere)}
-              className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm"
-            >
+            <textarea className="w-full border rounded p-2 h-48 text-sm" value={cerere} readOnly />
+            <button onClick={() => navigator.clipboard.writeText(cerere)} className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm">
               Copiază textul
             </button>
-            <button
-              onClick={descarcaPDF}
-              className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 text-sm"
-            >
+            <button onClick={descarcaPDF} className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 text-sm">
               Descarcă PDF
             </button>
-            <button
-              onClick={descarcaWord}
-              className="w-full bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700 text-sm"
-            >
+            <button onClick={descarcaWord} className="w-full bg-yellow-600 text-white py-2 rounded hover:bg-yellow-700 text-sm">
               Descarcă Word
             </button>
           </>
         )}
+      </div>
+
+      {/* Beneficii listă simplă */}
+      <div className="mt-8 max-w-lg text-sm text-gray-800 space-y-2 text-center">
+        <h3 className="text-lg font-semibold">De ce să folosești Cereri.ai?</h3>
+        <ul className="list-none mt-2 space-y-1">
+          <li>✅ Cereri oficiale în format PDF și Word</li>
+          <li>⚡ Rapid, intuitiv și gratuit</li>
+          <li>🔓 Fără cont, fără autentificare</li>
+          <li>🧠 Text scris automat și clar</li>
+          <li>📱 Funcționează perfect și pe telefon</li>
+        </ul>
       </div>
 
       <Feedback />
