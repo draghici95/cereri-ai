@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Feedback from '../components/Feedback';
 
 const tipuriCereri = [
@@ -15,26 +17,23 @@ export default function Home() {
   const [nume, setNume] = useState('');
   const [functie, setFunctie] = useState('');
   const [firma, setFirma] = useState('');
-  const [dataStart, setDataStart] = useState('');
-  const [dataEnd, setDataEnd] = useState('');
-  const [dataSingle, setDataSingle] = useState('');
+  const [dataStart, setDataStart] = useState<Date | null>(null);
+  const [dataEnd, setDataEnd] = useState<Date | null>(null);
+  const [dataSingle, setDataSingle] = useState<Date | null>(null);
   const [tip, setTip] = useState(tipuriCereri[0]);
   const [cerere, setCerere] = useState('');
   const [loading, setLoading] = useState(false);
 
   const esteConcediu = tip.includes('concediu');
 
-  const filtrareText = (text: string): string => {
-    const linii = text.trim().split('\n');
-    if (linii[0].toLowerCase().includes('cerere')) linii.shift();
-    return linii
-      .filter((l) => !l.toLowerCase().includes('semnătură') && !l.toLowerCase().includes('data:'))
-      .join('\n');
-  };
+  const formatData = (data: Date | null): string =>
+    data ? data.toLocaleDateString('ro-RO') : '';
 
   const genereazaCererea = async () => {
     setLoading(true);
-    const data = esteConcediu ? `${dataStart} - ${dataEnd}` : dataSingle;
+    const data = esteConcediu
+      ? `${formatData(dataStart)} - ${formatData(dataEnd)}`
+      : formatData(dataSingle);
 
     const res = await fetch('/api/genereaza', {
       method: 'POST',
@@ -45,6 +44,14 @@ export default function Home() {
     const dataRes = await res.json();
     setCerere(filtrareText(dataRes.output));
     setLoading(false);
+  };
+
+  const filtrareText = (text: string): string => {
+    const linii = text.trim().split('\n');
+    if (linii[0].toLowerCase().includes('cerere')) linii.shift();
+    return linii
+      .filter((l) => !l.toLowerCase().includes('semnătură') && !l.toLowerCase().includes('data:'))
+      .join('\n');
   };
 
   const descarcaPDF = async () => {
@@ -234,31 +241,34 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="flex flex-col w-full">
               <label className="text-sm mb-1">Data început</label>
-              <input
-                type="date"
-                value={dataStart}
-                onChange={(e) => setDataStart(e.target.value)}
+              <DatePicker
+                selected={dataStart}
+                onChange={(date) => setDataStart(date)}
+                dateFormat="dd.MM.yyyy"
                 className="w-full border rounded p-2 text-sm"
+                placeholderText="Selectează data"
               />
             </div>
             <div className="flex flex-col w-full">
               <label className="text-sm mb-1">Data final</label>
-              <input
-                type="date"
-                value={dataEnd}
-                onChange={(e) => setDataEnd(e.target.value)}
+              <DatePicker
+                selected={dataEnd}
+                onChange={(date) => setDataEnd(date)}
+                dateFormat="dd.MM.yyyy"
                 className="w-full border rounded p-2 text-sm"
+                placeholderText="Selectează data"
               />
             </div>
           </div>
         ) : (
           <div className="flex flex-col">
             <label className="text-sm mb-1">Selectează data</label>
-            <input
-              type="date"
-              value={dataSingle}
-              onChange={(e) => setDataSingle(e.target.value)}
+            <DatePicker
+              selected={dataSingle}
+              onChange={(date) => setDataSingle(date)}
+              dateFormat="dd.MM.yyyy"
               className="w-full border rounded p-2 text-sm"
+              placeholderText="Selectează data"
             />
           </div>
         )}
@@ -300,7 +310,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* Secțiune Beneficii */}
       <div className="mt-12 max-w-md mx-auto text-center text-gray-700 text-sm space-y-4">
         <h2 className="text-lg font-semibold text-black">De ce să folosești Cereri.ai?</h2>
         <ul className="list-disc list-inside text-left text-sm">
