@@ -26,14 +26,22 @@ export default function Home() {
 
   const esteConcediu = tip.includes('concediu');
 
-  const formatData = (data: Date | null): string =>
-    data ? data.toLocaleDateString('ro-RO') : '';
+  const formatDate = (date: Date | null) =>
+    date ? date.toLocaleDateString('ro-RO') : '';
+
+  const filtrareText = (text: string): string => {
+    const linii = text.trim().split('\n');
+    if (linii[0].toLowerCase().includes('cerere')) linii.shift();
+    return linii
+      .filter((l) => !l.toLowerCase().includes('semnătură') && !l.toLowerCase().includes('data:'))
+      .join('\n');
+  };
 
   const genereazaCererea = async () => {
     setLoading(true);
     const data = esteConcediu
-      ? `${formatData(dataStart)} - ${formatData(dataEnd)}`
-      : formatData(dataSingle);
+      ? `${formatDate(dataStart)} - ${formatDate(dataEnd)}`
+      : formatDate(dataSingle);
 
     const res = await fetch('/api/genereaza', {
       method: 'POST',
@@ -44,14 +52,6 @@ export default function Home() {
     const dataRes = await res.json();
     setCerere(filtrareText(dataRes.output));
     setLoading(false);
-  };
-
-  const filtrareText = (text: string): string => {
-    const linii = text.trim().split('\n');
-    if (linii[0].toLowerCase().includes('cerere')) linii.shift();
-    return linii
-      .filter((l) => !l.toLowerCase().includes('semnătură') && !l.toLowerCase().includes('data:'))
-      .join('\n');
   };
 
   const descarcaPDF = async () => {
@@ -239,38 +239,29 @@ export default function Home() {
 
         {esteConcediu ? (
           <div className="flex flex-col sm:flex-row gap-2">
-            <div className="flex flex-col w-full">
-              <label className="text-sm mb-1">Data început</label>
-              <DatePicker
-                selected={dataStart}
-                onChange={(date) => setDataStart(date)}
-                dateFormat="dd.MM.yyyy"
-                className="w-full border rounded p-2 text-sm"
-                placeholderText="Selectează data"
-              />
-            </div>
-            <div className="flex flex-col w-full">
-              <label className="text-sm mb-1">Data final</label>
-              <DatePicker
-                selected={dataEnd}
-                onChange={(date) => setDataEnd(date)}
-                dateFormat="dd.MM.yyyy"
-                className="w-full border rounded p-2 text-sm"
-                placeholderText="Selectează data"
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col">
-            <label className="text-sm mb-1">Selectează data</label>
             <DatePicker
-              selected={dataSingle}
-              onChange={(date) => setDataSingle(date)}
-              dateFormat="dd.MM.yyyy"
+              selected={dataStart}
+              onChange={(date) => setDataStart(date)}
+              placeholderText="Data început"
               className="w-full border rounded p-2 text-sm"
-              placeholderText="Selectează data"
+              dateFormat="dd.MM.yyyy"
+            />
+            <DatePicker
+              selected={dataEnd}
+              onChange={(date) => setDataEnd(date)}
+              placeholderText="Data final"
+              className="w-full border rounded p-2 text-sm"
+              dateFormat="dd.MM.yyyy"
             />
           </div>
+        ) : (
+          <DatePicker
+            selected={dataSingle}
+            onChange={(date) => setDataSingle(date)}
+            placeholderText="Selectează data"
+            className="w-full border rounded p-2 text-sm"
+            dateFormat="dd.MM.yyyy"
+          />
         )}
 
         <button
