@@ -4,7 +4,7 @@ declare global {
     }
   }
   
-  export const GA_TRACKING_ID = 'G-BZH2CDNGKD';
+  export const GA_TRACKING_ID = 'G-8ZH2CDNGKD';
   
   export const pageview = (url: string) => {
     window.gtag('config', GA_TRACKING_ID, {
