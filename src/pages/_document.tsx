@@ -58,7 +58,7 @@ export default function Document() {
               gtag('js', new Date());
 
               // Configurare GA4
-              gtag('config', 'G-BZH2CDNGKD');
+              gtag('config', 'G-8ZH2CDNGKD');
 
               // Configurare Google Ads
               gtag('config', 'AW-954838666');
