@@ -18,7 +18,10 @@ export default function Document() {
         <meta name="author" content="Cereri.ai" />
 
         {/* Google Search Console Verification */}
-        <meta name="google-site-verification" content="FfSA2WOqUhqFJ_UEL82pFNdda8zDuKQHF58ha7tEh_U" />
+        <meta
+          name="google-site-verification"
+          content="FfSA2WOqUhqFJ_UEL82pFNdda8zDuKQHF58ha7tEh_U"
+        />
 
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
@@ -32,19 +35,20 @@ export default function Document() {
               "@type": "WebApplication",
               name: "Cereri.ai",
               url: "https://cereri-ai.vercel.app",
-              description: "Generează rapid cereri oficiale în format PDF și Word.",
+              description:
+                "Generează rapid cereri oficiale în format PDF și Word.",
               applicationCategory: "Productivity",
               inLanguage: "ro",
               offers: {
                 "@type": "Offer",
                 price: "0",
-                priceCurrency: "RON"
-              }
+                priceCurrency: "RON",
+              },
             }),
           }}
         />
 
-        {/* Google Analytics */}
+        {/* Google Analytics + Google Ads */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZH2CDNGKD"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -52,22 +56,16 @@ export default function Document() {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-BZH2CDNGKD');
-            `,
-          }}
-        />
 
-        {/* Google Ads Conversion Tracking */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-954838666"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
+              // Configurare GA4
+              gtag('config', 'G-BZH2CDNGKD');
+
+              // Configurare Google Ads
               gtag('config', 'AW-954838666');
+
+              // (Optional) Conversie
               gtag('event', 'conversion', {
-                'send_to': 'AW-954838666/XxA2CKuW37oaEIrdpscD'
+                send_to: 'AW-954838666/XxA2CKuW37oaEIrdpscD'
               });
             `,
           }}
