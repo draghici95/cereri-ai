@@ -25,9 +25,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const esteConcediu = tip.includes('concediu');
-
-  const formatDate = (date: Date | null) =>
-    date ? date.toLocaleDateString('ro-RO') : '';
+  const formatDate = (date: Date | null) => date ? date.toLocaleDateString('ro-RO') : '';
 
   const filtrareText = (text: string): string => {
     const linii = text.trim().split('\n');
@@ -62,7 +60,7 @@ export default function Home() {
     const { width, height } = page.getSize();
 
     const fontUrl = '/fonts/noto.ttf';
-    const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer());
+    const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
     const customFont = await doc.embedFont(fontBytes);
 
     const fontSize = 11;
@@ -82,10 +80,10 @@ export default function Home() {
     y -= lineHeight * 2;
 
     const wrappedLines: string[] = [];
-    cerere.split('\n').forEach((paragraph) => {
+    cerere.split('\n').forEach(paragraph => {
       const words = paragraph.split(' ');
       let line = '';
-      words.forEach((word) => {
+      words.forEach(word => {
         const testLine = line + word + ' ';
         const testWidth = customFont.widthOfTextAtSize(testLine, fontSize);
         if (testWidth < maxWidth) {
@@ -99,7 +97,7 @@ export default function Home() {
       wrappedLines.push('');
     });
 
-    wrappedLines.forEach((line) => {
+    wrappedLines.forEach(line => {
       if (y < 80) {
         page = doc.addPage([595.28, 841.89]);
         y = height - 60;
@@ -115,7 +113,6 @@ export default function Home() {
     });
 
     y -= 40;
-
     page.drawText('Semnătură:', {
       x: startX,
       y,
@@ -142,13 +139,12 @@ export default function Home() {
 
     const pdfBytes = await doc.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `cerere_${tip.replace(/\s+/g, '_')}.pdf`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `cerere_${tip.replace(/\s+/g, '_')}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const descarcaWord = async () => {
@@ -160,12 +156,11 @@ export default function Home() {
               children: [new TextRun({ text: tip, bold: true, size: 26, break: 1 })],
               spacing: { after: 200 },
             }),
-            ...cerere.split('\n').map(
-              (line) =>
-                new Paragraph({
-                  children: [new TextRun({ text: line, size: 22 })],
-                  spacing: { after: 100 },
-                })
+            ...cerere.split('\n').map(line =>
+              new Paragraph({
+                children: [new TextRun({ text: line, size: 22 })],
+                spacing: { after: 100 },
+              })
             ),
             new Paragraph({
               children: [
@@ -174,12 +169,7 @@ export default function Home() {
               ],
             }),
             new Paragraph({
-              children: [
-                new TextRun({
-                  text: `Data: ${new Date().toLocaleDateString('ro-RO')}`,
-                  size: 22,
-                }),
-              ],
+              children: [new TextRun({ text: `Data: ${new Date().toLocaleDateString('ro-RO')}`, size: 22 })],
               alignment: 'right',
             }),
           ],
@@ -188,12 +178,12 @@ export default function Home() {
     });
 
     const blob = await Packer.toBlob(doc);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `cerere_${tip.replace(/\s+/g, '_')}.docx`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `cerere_${tip.replace(/\s+/g, '_')}.docx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -301,6 +291,7 @@ export default function Home() {
         )}
       </div>
 
+      {/* Beneficii */}
       <div className="mt-12 max-w-md mx-auto text-center text-gray-700 text-sm space-y-4">
         <h2 className="text-lg font-semibold text-black">De ce să folosești Cereri.ai?</h2>
         <ul className="list-disc list-inside text-left text-sm">
